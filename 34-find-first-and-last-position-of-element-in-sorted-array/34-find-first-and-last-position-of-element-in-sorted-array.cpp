@@ -1,28 +1,41 @@
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        return {BinarySearch(nums, target, "FIRST"), BinarySearch(nums, target, "LAST")};
-    }
-    
-    int BinarySearch(vector<int> nums, int num, string find) {
-        int left = 0, right = nums.size() - 1, mid;
-        int result = -1;
-
-        while (left <= right) {
-            mid = (left + right) / 2;
-
-            if (nums[mid] == num) {
-                result = mid;
-                (find == "FIRST") ? right = mid - 1 : left = mid + 1;
-            }
-            else if (nums[mid] > num) {
-                right = mid - 1;
-            }
-            else {
-                left = mid + 1;
+        vector<int>ans{-1, -1};
+    //we have to do two binray search operations 
+        //one for 1st index.
+        int low = 0;
+        int high = nums.size()-1;
+        while( low <= high){
+            int mid = (low+ high) /2;
+            if(nums[mid] == target){
+                ans[0] = mid;
+                //continue searching in left side of the nums to find 1st index of the given target
+                high = mid-1;
+            }else if (nums[mid] < target){
+                //search in right side of the  nums
+                 low = mid+1;
+            }else{
+                //search in left side of the  nums
+                high = mid-1;
             }
         }
-
-        return result;
+        //second binary search 
+        //to find the last index of the given target
+        low = 0;
+        high = nums.size()-1;
+        while(low <= high){
+            int mid = (low + high)/2;
+            
+            if(nums[mid] == target){
+                ans[1] = mid;
+                //continue searching in right side as we want the last index
+                low = mid+1;
+            }else if(nums[mid] < target){
+                low =  mid+1;
+            }else high = mid-1;
+        }
+        return ans;
+        
     }
 };
