@@ -1,18 +1,19 @@
 class Solution {
 public:
     int mirrorReflection(int p, int q) {
-        // while((p%2==0) && (q%2==0)){
-        //     p/=2;
-        //     q/=2;
-        // }
-        // //both p qnd q can't be even
-        // if((p%2)==0 && (q%2)!=0){
-        //     return 2;//when p is even and q is odd
-        // } 
-        // if((p%2)!=0 && (q%2)!=0){
-        //     return 1;// when p is odd and q is odd
-        // } 
-        // return 0;// when p is odd and q is even
-        return (p & -p) > (q & -q) ? 2 : (p & -p) < (q & -q) ? 0:1;
+        if(q==0)return 0;
+        if(q==p)return 1;
+        int k=1;
+        int c=p;
+       while(1)
+       {
+           if(c%q==0)break;
+           else{
+               k++;c=p*k;
+           }
+       }
+        if((c/q)%2 and k%2==0)return 0;
+        if((c/q)%2)return 1;
+        else return 2;
     }
 };
