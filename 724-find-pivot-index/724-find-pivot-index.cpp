@@ -1,15 +1,13 @@
 class Solution {
 public:
     int pivotIndex(vector<int>& nums) {
-        auto sum=accumulate(nums.begin(),nums.end(),0); //O(N) complexity
-        int lsum=0,rsum=sum;
-        int n=nums.size();
-        for(int i=0;i<n;i++)
+        int sum =0,n=nums.size(), k = 0;
+        for(int i:nums)sum+=i;
+        if((sum - nums[0]) == 0) return 0;
+        for(int i= 1; i<n;i++)
         {
-            rsum-=nums[i];
-            if(lsum==rsum)
-                return i;
-            lsum+=nums[i];
+            k+=nums[i-1];
+            if(k == sum-(k+nums[i])) return i;
         }
         return -1;
     }
