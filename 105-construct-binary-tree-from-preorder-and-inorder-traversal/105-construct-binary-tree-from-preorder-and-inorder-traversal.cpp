@@ -11,43 +11,18 @@
  */
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
-    {
-        int i = 0;
-        int j = 0;
-        int pre_size = preorder.size();
-        if (pre_size == 0)
-        {
-            return NULL;
-        }
-
-        stack<TreeNode*> s;
-        TreeNode* root = new TreeNode(preorder[0]);
-        s.push(root);
-        
-        while (i < pre_size - 1)
-        {
-            TreeNode* node = s.top();
-            if (node->val != inorder[j])
-            {
-                ++i;
-                node->left = new TreeNode(preorder[i]);
-                node = node->left;
-                s.push(node);
-            } 
-            else
-            {
-                s.pop();
-                ++j;
-                if (s.empty() || s.top()->val != inorder[j])
-                {
-                    ++i;
-                    node->right = new TreeNode(preorder[i]);
-                    node = node->right;
-                    s.push(node);
-                }
-            }
-        }
+    TreeNode* solve(int prestart, int instart, int inend, vector<int>& preorder, vector<int>& inorder)      {
+        if(prestart > preorder.size()-1 || instart > inend) return NULL;
+        TreeNode* root = new TreeNode(preorder[prestart]);
+        int index = 0;
+        for(int i = instart; i <= inend; i++)
+            if(root->val == inorder[i]) index = i;
+            
+        root->left = solve(prestart+1, instart, index-1, preorder, inorder);
+        root->right = solve(prestart+index-instart+1, index+1, inend, preorder, inorder);
         return root;
+    }
+        TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return solve(0, 0, inorder.size()-1, preorder, inorder);
     }
 };
