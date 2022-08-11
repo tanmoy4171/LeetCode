@@ -11,21 +11,43 @@
  */
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-		int n = inorder.size();
-        int Idx = 0;
-        return helper(preorder, inorder, Idx, 0, n-1);
-    }
-    
-    TreeNode* helper(vector<int>& preorder, vector<int>& inorder, int& Idx, int left, int right) {
-        if (left > right) return NULL;
-        int pivot = left;  // find the root from inorder
-        while(inorder[pivot] != preorder[Idx]) pivot++;
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
+    {
+        int i = 0;
+        int j = 0;
+        int pre_size = preorder.size();
+        if (pre_size == 0)
+        {
+            return NULL;
+        }
+
+        stack<TreeNode*> s;
+        TreeNode* root = new TreeNode(preorder[0]);
+        s.push(root);
         
-        Idx++;
-        TreeNode* newNode = new TreeNode(inorder[pivot]);
-        newNode->left = helper(preorder, inorder, Idx, left, pivot-1);
-        newNode->right = helper(preorder, inorder, Idx, pivot+1, right);
-        return newNode;
+        while (i < pre_size - 1)
+        {
+            TreeNode* node = s.top();
+            if (node->val != inorder[j])
+            {
+                ++i;
+                node->left = new TreeNode(preorder[i]);
+                node = node->left;
+                s.push(node);
+            } 
+            else
+            {
+                s.pop();
+                ++j;
+                if (s.empty() || s.top()->val != inorder[j])
+                {
+                    ++i;
+                    node->right = new TreeNode(preorder[i]);
+                    node = node->right;
+                    s.push(node);
+                }
+            }
+        }
+        return root;
     }
 };
