@@ -11,16 +11,26 @@
  */
 class Solution {
 public:
-    bool solve(TreeNode* root,long long int min,long long int max){
-        if(!root){
-            return true;
-        }
-        if(root->val>=max || root->val<=min){
-            return false;
-        }
-        return solve(root->left,min,root->val) and solve(root->right,root->val,max); 
+    void helper(TreeNode* root, vector<int> &inorder) {
+        
+        if(root == NULL) 
+            return;
+        helper(root->left, inorder);
+        inorder.push_back(root->val);
+        helper(root->right, inorder);
     }
     bool isValidBST(TreeNode* root) {
-        return solve(root,-1e18,1e18);
+        
+        vector<int> inorder;
+        helper(root, inorder);
+        
+        int n = inorder.size();
+        
+        for(int i=1;i<n;i++) {
+            if(inorder[i-1]  >= inorder[i])
+                return false;
+        }
+        return true;
+        
     }
 };
