@@ -19,21 +19,18 @@ public:
 */
 
 class Solution {
-private:
-    void travel(Node* root, vector<int>& result) {
-        if (root == nullptr) {
-            return;
-        }
-        
-        result.push_back(root -> val);
-        for (Node* child : root -> children) {
-            travel(child, result);
-        }
-    }
 public:
     vector<int> preorder(Node* root) {
-        vector<int> result;
-        travel(root, result);
-        return result;
+        if(root==NULL) return {};
+        stack<Node*> stk;
+        vector<int> res;
+        stk.push(root);
+        while(!stk.empty()) {
+            Node* temp=stk.top();
+            stk.pop();
+            for(int i=temp->children.size()-1;i>=0;i--) stk.push(temp->children[i]);
+            res.push_back(temp->val);
+        }
+        return res;
     }
 };
