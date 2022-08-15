@@ -10,21 +10,28 @@
  * };
  */
 class Solution {
-    public:
-    vector<vector<int>> ret;
+     public:
+        vector<vector<int>> levelOrder(TreeNode* root) {
+            if(root==NULL)
+               return {};
+           vector<vector<int>> ans; 
+            queue<TreeNode*> q;
+            q.push(root);
+            TreeNode *temp;
+            int len;
+            while(!q.empty()){
+               len=q.size();
+		       vector<int> v;
+               for(int i=0;i<len;i++){
+                    temp=q.front();
+                    q.pop();
+                    v.push_back(temp->val);
 
-    void buildVector(TreeNode *root, int depth){
-        if(root == NULL) return;
-        if(ret.size() == depth)
-            ret.push_back(vector<int>());
-
-        ret[depth].push_back(root->val);
-        buildVector(root->left, depth + 1);
-        buildVector(root->right, depth + 1);
-    }
-
-    vector<vector<int> > levelOrder(TreeNode *root) {
-        buildVector(root, 0);
-        return ret;
-    }
+                   if(temp->left) q.push(temp->left);
+                   if(temp->right) q.push(temp->right);
+                }
+		        ans.push_back(v);
+            }
+          return ans;
+        }
 };
