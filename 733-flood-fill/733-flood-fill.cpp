@@ -1,18 +1,27 @@
 class Solution {
 public:
-    void dfs(vector<vector<int>>& image,int sr,int sc,int newColor,int x)
-	{
-		if(sr<0 or sr>=image.size() or sc<0 or sc>=image[0].size() or image[sr][sc]!=x or image[sr][sc]==newColor)return;
+    void DFS(int x, int y, vector<vector<int>> &image, int pc, int nc)  {
 
-		image[sr][sc]=newColor;
-		dfs(image,sr-1,sc,newColor,x);
-		 dfs(image,sr,sc+1,newColor,x);
-		 dfs(image,sr+1,sc,newColor,x);
-		 dfs(image,sr,sc-1,newColor,x);
-	}
-	vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
-	int x=image[sr][sc];
-	dfs(image,sr,sc,newColor,x);
-	return image;
-	}
+        if(x<0 || y<0 || x>=image.size() || y>=image[0].size() || image[x][y] !=pc)  
+            return;
+        image[x][y] = nc;
+        
+        DFS(x-1,y, image, pc, nc);
+        DFS(x,y-1, image, pc, nc);
+        DFS(x,y+1, image, pc, nc);
+        DFS(x+1,y, image, pc, nc);
+        
+        return;
+        
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int pColor = image[sr][sc];
+        if(pColor == newColor)
+            return image;
+        
+        DFS(sr,sc, image, pColor, newColor);
+        return image;
+        
+        
+    }
 };
