@@ -1,14 +1,16 @@
 class Solution {
 public:
     vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> ret;
-        for (int i = 0; i < numRows; i++) {
-            vector<int> row(i + 1, 1);
-            for (int j = 1; j < i; j++) {
-                row[j] = ret[i - 1][j] + ret[i - 1][j - 1];
+        vector<vector<int>> triangle(numRows);
+        triangle[0].push_back(1);
+
+        for(int i=1; i< numRows; i++){
+            triangle[i].push_back(1);
+            for( int j = 1; j < i; j++){
+                triangle[i].push_back(triangle[i-1][j-1]+triangle[i-1][j]);
             }
-            ret.push_back(row);
+            triangle[i].push_back(1);                                      
         }
-        return ret;
+        return triangle;
     }
 };
