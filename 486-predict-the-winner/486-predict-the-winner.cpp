@@ -1,29 +1,23 @@
 class Solution {
 public:
-
-    long long fun(int i,int j,vector<int>&nums,vector<vector<int>>&dp){
-        if(i==j)return nums[i];
-        if(i>j){
-            return 0;
-        }
+    int dp[21][21];
+    int solve(vector<int>& nums,int i,int j)
+    {
+        if(i>j)return 0;
         if(dp[i][j]!=-1)return dp[i][j];
-        
-        long long l=nums[i]+min(fun(i+2,j,nums,dp),fun(i+1,j-1,nums,dp));
-        long long r=nums[j]+min(fun(i+1,j-1,nums,dp),fun(i,j-2,nums,dp));
-        
-        return dp[i][j]=max(l,r);
+        int t1=0;
+        int t2=0;
+        t1=nums[i]+min(solve(nums,i+2,j),solve(nums,i+1,j-1));
+        t2=nums[j]+min(solve(nums,i,j-2),solve(nums,i+1,j-1));
+        return dp[i][j]=max(t1,t2);
     }
-    
     bool PredictTheWinner(vector<int>& nums) {
-        int n=nums.size();
-        long long a=0,b=0;
-        vector<vector<int>>dp(n,vector<int>(n,-1));
+        memset(dp,-1,sizeof(dp));
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        int t1=solve(nums,0,nums.size()-1);
+      //  cout<<t1<<endl;
+        if(sum-t1>t1)return false;
+        return true;
         
-        for(auto i:nums)
-            b+=i;
-        
-        a=fun(0,n-1,nums,dp);
-        long long c=b-a;
-        return (a>=c);
     }
 };
