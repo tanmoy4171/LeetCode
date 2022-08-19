@@ -1,28 +1,29 @@
 class Solution {
 public:
-    int solve(vector<int>& nums,int i, int j ){
-      if(i>j)
-          return 0;
-    
-     int choice1=nums[i]+min(solve(nums,i+2,j),solve(nums,i+1,j-1));
-     int choice2=nums[j]+min(solve(nums,i+1,j-1),solve(nums,i,j-2));
+
+    long long fun(int i,int j,vector<int>&nums,vector<vector<int>>&dp){
+        if(i==j)return nums[i];
+        if(i>j){
+            return 0;
+        }
+        if(dp[i][j]!=-1)return dp[i][j];
         
-     return max(choice1,choice2);
+        long long l=nums[i]+min(fun(i+2,j,nums,dp),fun(i+1,j-1,nums,dp));
+        long long r=nums[j]+min(fun(i+1,j-1,nums,dp),fun(i,j-2,nums,dp));
         
+        return dp[i][j]=max(l,r);
     }
     
-
     bool PredictTheWinner(vector<int>& nums) {
+        int n=nums.size();
+        long long a=0,b=0;
+        vector<vector<int>>dp(n,vector<int>(n,-1));
         
-        int totalSum=0;
-        for(int i=0;i<nums.size();i++){
-            totalSum+=nums[i];
-        }
+        for(auto i:nums)
+            b+=i;
         
-        int sum1= solve(nums,0,nums.size()-1);
-        
-        int sum2=totalSum-sum1;
-        
-        return sum1>=sum2;
+        a=fun(0,n-1,nums,dp);
+        long long c=b-a;
+        return (a>=c);
     }
 };
