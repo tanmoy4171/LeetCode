@@ -1,19 +1,32 @@
 class Solution {
 public:
-    vector<string>result;
+    vector<string> res;
     
-    void helper(int open,int close,int n,string current)
-    {
-        if(current.length()==n*2)
-        {
-            result.push_back(current);
+    void solve(string asf,int open,int close){
+        
+        if(open == 0 && close == 0){
+            res.push_back(asf);
             return;
         }
-        if(open<n)  helper(open+1,close,n,current+"(");
-        if(close<open)  helper(open,close+1,n,current+")");
+       
+	   // for open braces, there is always  a choice
+        if(open != 0){
+              solve(asf + '(',open - 1,close);
+        }
+        
+		// close braces should be higher than open, otherwise it leads to not balanced paranthesis.                 // Example : ()) can't be balanced
+        if(close>open){
+            solve(asf + ')',open,close - 1);
+        }
+        return;
     }
+    
     vector<string> generateParenthesis(int n) {
-        helper(0,0,n,"");
-        return result;
+        int open = n,close = n;
+        string asf = "";
+        
+        solve(asf,open,close);
+        return res;
+        
     }
 };
