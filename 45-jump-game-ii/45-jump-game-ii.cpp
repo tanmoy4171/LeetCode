@@ -1,20 +1,20 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        // support variables
-        int len = nums.size(), steps[len];
-        // presetting steps
-        for (int i = 1; i < len; i++) {
-            steps[i] = INT_MAX;
-        }
-        steps[0] = 0;
-        // populating steps with the lowest possible values
-        for (int i = 0; i < len; i++) {
-            for (int lmt = i, j = min(len - 1, i + nums[i]); j > lmt; j--) {
-                if (steps[j] > steps[i] + 1) steps[j] = steps[i] + 1;
-                else break;
-            }
-        }
-        return steps[len - 1];
+        
+        int numOfJumps = 0, currentIntervalEnd = 0, farthestReachFoundSoFar = 0;
+        
+        for(int i = 0 ; i < nums.size() - 1 ; i++) {     // Because you can stop the work once youve
+                                                                            // reached the last index
+            farthestReachFoundSoFar = max(farthestReachFoundSoFar, i + nums[i]);    // maximize our                                                                                                    
+                                                                                    // reach
+            if(i == currentIntervalEnd) {                // When we reach the end of current intervals
+                                                         // end, we need to make our next jump and
+                numOfJumps++;                            // and update our current interval end with       
+                currentIntervalEnd = farthestReachFoundSoFar;   // the farthest reach found so far
+                                                         // We made sure this was the best possible jump
+            }                                            // because we traversed th whole interval and 
+        }                                                // maximized our reach and now we are sure
+        return numOfJumps;                               // where our next jump will be. Greedy!
     }
 };
