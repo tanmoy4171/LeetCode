@@ -2,19 +2,25 @@ class Solution {
 public:
     int jump(vector<int>& nums) {
         
-        int numOfJumps = 0, currentIntervalEnd = 0, farthestReachFoundSoFar = 0;
+        int n = nums.size();
         
-        for(int i = 0 ; i < nums.size() - 1 ; i++) {     // Because you can stop the work once youve
-                                                                            // reached the last index
-            farthestReachFoundSoFar = max(farthestReachFoundSoFar, i + nums[i]);    // maximize our                                                                                                    
-                                                                                    // reach
-            if(i == currentIntervalEnd) {                // When we reach the end of current intervals
-                                                         // end, we need to make our next jump and
-                numOfJumps++;                            // and update our current interval end with       
-                currentIntervalEnd = farthestReachFoundSoFar;   // the farthest reach found so far
-                                                         // We made sure this was the best possible jump
-            }                                            // because we traversed th whole interval and 
-        }                                                // maximized our reach and now we are sure
-        return numOfJumps;                               // where our next jump will be. Greedy!
+        int jumps = 0;
+        int maxReach = 0;
+        int currReach = 0;
+        
+        for(int i=0; i<n-1; i++)
+        {
+            maxReach = max(maxReach, i+nums[i]);
+            
+            if(i==currReach)
+            {
+                jumps++;
+                currReach = maxReach;
+            }
+            
+        }
+        
+        return jumps;
+        
     }
 };
