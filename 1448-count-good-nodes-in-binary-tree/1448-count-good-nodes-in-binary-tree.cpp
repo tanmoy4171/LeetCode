@@ -12,42 +12,22 @@
 class Solution {
 public:
     
-    int count = 0;
-    
-    void dfs(TreeNode* root, int maxi)
-    {
-        // base case
-        
-        if(root == NULL)
-            return;
-        
-        // if max. value of ancestors is less than or equal to curr node then increment count
-        
-        if(root -> val >= maxi)
-        {
-            count++;
+    void solve(TreeNode* root, int maxi, int &count){
+
+        if(!root) return;
+        if(root->val >= maxi){     //pre-order traversal
+            count++;               //if root->val is greater than or equal to maxi
+            maxi=root->val;        //update root->val and increment count
         }
-        
-        // update maxi
-        
-        maxi = max(maxi, root -> val);
-        
-        // call for left subtree
-        
-        dfs(root -> left, maxi);
-        
-        // call for right subtree
-        
-        dfs(root -> right, maxi);
+
+        solve(root->left,maxi,count);
+        solve(root->right,maxi,count);
     }
-    
+
     int goodNodes(TreeNode* root) {
-        
-        if(root == NULL)
-            return 0;
-        
-        dfs(root, root -> val);
-        
+        if(!root) return 0;
+        int count=0;
+        solve(root,INT_MIN,count);
         return count;
     }
 };
