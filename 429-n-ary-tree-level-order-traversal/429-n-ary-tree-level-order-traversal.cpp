@@ -18,18 +18,60 @@ public:
 };
 */
 
-class Solution { // 16 ms, faster than 98.53%
+class Solution {
 public:
-    vector<vector<int>> ans;
     vector<vector<int>> levelOrder(Node* root) {
-        dfs(root, 0);
-        return ans;
-    }
-    void dfs(Node* root, int level) {
-        if (root == nullptr) return;
-        if (level == ans.size()) ans.emplace_back(); // Need more level -> Add new level
-        ans[level].push_back(root->val);
-        for (Node* child : root->children)
-            dfs(child, level + 1);
+        
+        // base case
+        
+        if(root == NULL)
+            return {};
+        
+        // declare a queue
+        
+        queue<Node*> q;
+        
+        q.push(root);
+        
+        vector<vector<int>> res;
+        
+        while(!q.empty())
+        {
+            int size = q.size();
+            
+            // temp will store the nodes of one level
+            
+            vector<int> temp;
+            
+            for(int k = 0; k < size; k++)
+            {
+                // take out the front of the queue
+                
+                auto curr = q.front();
+                
+                q.pop();
+                
+                // push the curr -> val into temp
+                
+                temp.push_back(curr -> val);
+                
+                // find the childs of curr node
+                
+                vector<Node*> childs = curr -> children;
+                
+                // push all the childs of curr node into queue
+                
+                for(int i = 0; i < childs.size(); i++)
+                {
+                    q.push(childs[i]);
+                }
+            }
+            
+            // push the nodes of curr level into res
+            
+            res.push_back(temp);
+        }
+        
+        return res;
     }
 };
