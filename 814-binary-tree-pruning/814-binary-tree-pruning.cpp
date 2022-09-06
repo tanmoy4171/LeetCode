@@ -9,24 +9,21 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
-public:
-	TreeNode* pruneTree(TreeNode* root) {
-        if(root==NULL )
+class Solution
+{
+    public:
+
+        TreeNode* pruneTree(TreeNode *root)
+        {
+           	// base case : 
+            if (!root) return NULL;
+           	// go to the leftmost node
+            root->left = pruneTree(root->left);
+           	// go to the rightmost node 
+            root->right = pruneTree(root->right);
+           	//check the value of leaf node is 0 => then make it NULL
+            if (root->val == 0 && !root->left && !root->right) return NULL;
+
             return root;
-        
-        auto p=pruneTree(root->left);// check for left subtree
-        auto q=pruneTree(root->right);// check for right subtree
-        
-        if(p==NULL)// if left subtree is not containing 1, remove it
-            root->left=NULL;
-        if(q==NULL)// if left subtree is not containing 1, remove it
-            root->right=NULL;
-        
-        // if any of left or right or the root is having 1, then return 1
-        // by return 1, we mean that this subtree should not get removed.
-        if(p || q || root->val)
-            return root;
-        return NULL;
-    }
+        }
 };
