@@ -1,24 +1,16 @@
 class Solution {
 public:
-    static bool cmp(vector<int>&v1,vector<int>&v2)
-    {
-        return v1[0]==v2[0]?v1[1]>v2[1]:v1[0]<v2[0];
-    }
-    int numberOfWeakCharacters(vector<vector<int>>& nums)
-    {
-        int count=0;
-        int n=nums.size();
-        sort(nums.begin(),nums.end(),cmp);
-        stack<pair<int,int>>s;
-        for(int i=0;i<n;i++)
-        {
-            while(s.size()&&s.top().first<nums[i][0]&&s.top().second<nums[i][1])
-            {
-                s.pop();
-                count++;
-            }
-            s.push({nums[i][0],nums[i][1]});
+    int ct[100002];
+    int numberOfWeakCharacters(vector<vector<int>>& a) {
+        int ans=0,ma=0;
+        for(int i=0;i<a.size();++i){
+            ct[a[i][0]]=max(a[i][1],ct[a[i][0]]);
+            ma=max(ma,a[i][0]);
         }
-        return count;
+        for(int i=ma-1;i>0;--i)
+            ct[i]=max(ct[i],ct[i+1]);
+        for(int i=0;i<a.size();++i)
+            if(ct[a[i][0]+1]>a[i][1])++ans;
+        return ans;
     }
 };
