@@ -11,24 +11,31 @@
  */
 class Solution {
 public:
-    unordered_map<int, int> f;
-    void dfs(TreeNode* root) {
-        if (!root) return;
-        else f[root->val]++;
-        dfs(root->left);
-        dfs(root->right);
+    
+    unordered_map<int,int> map;
+    
+    TreeNode* helper(TreeNode* root){
+        if(root==NULL) return NULL;
+        map[root->val]++;
+        helper(root->left);
+        helper(root->right);
+        return NULL;
     }
+    
+    
     vector<int> findMode(TreeNode* root) {
-        vector<int> res;
-        int tMax = -1;
-        dfs(root);
-        for (auto e: f) {
-            if (e.second == tMax) res.push_back(e.first);
-            else if (e.second > tMax) {
-                tMax = e.second;
-                res = {e.first};
-            }
+        helper(root);
+        priority_queue<pair<int,int>> pq;
+        for(auto it=map.begin();it!=map.end();it++){
+               pq.push({it->second,it->first});
         }
-        return res;
+        int max=pq.top().first;
+        vector<int> ans;
+        
+        while(pq.top().first==max && pq.empty()==false){
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        return ans;
     }
 };
