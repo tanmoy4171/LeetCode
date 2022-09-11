@@ -9,72 +9,65 @@
  */
 class Codec {
 public:
-    // encoding logic
+
+    // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        // edge case out
-        if (!root) return "";
-        // support variables
-        string res = to_string(root->val);
-        int len = 1;
+        if(!root){
+            return "";
+        }
+        string s="";
         queue<TreeNode*> q;
         q.push(root);
-		// BFS here!
-        while (len) {
-            while(len--) {
-                // extracting the front of the queue
-                root = q.front();
-                q.pop();
-                res += ',';
-                if (root->left) {
-                    res += to_string(root->left->val);
-                    // adding the next node only if meaningful - if it has children
-                    q.push(root->left);
-                }
-                res += ',';
-                if (root->right) {
-                    res += to_string(root->right->val);
-                    // adding the next node only if meaningful - if it has children
-                    q.push(root->right);
-                }
+        while(!q.empty()){
+            TreeNode* currNode=q.front();
+            q.pop();
+            if(currNode==NULL){
+                s.append("#,");
             }
-            len = q.size();
+            else{
+                s.append(to_string(currNode->val)+",");
+            }
+            if(currNode!=NULL){
+                q.push(currNode->left);
+                q.push(currNode->right);
+            }
+            
         }
-        return res;
-    }
-    
-    // decoding logic
-    int pos = 0;
-    int readString(string &s) {
-        string tmp = "";
-        while(pos < s.size() && s[pos] != ',') tmp += s[pos++];
-        pos++;
-        return tmp.size() ? stoi(tmp) : INT_MIN;
+        return s;
     }
 
-    TreeNode* deserialize(string ser) {
-        if (!ser.size()) return NULL;
-        int len = 1, nextVal;
-        TreeNode *root = new TreeNode(readString(ser)), *curr;
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data.size()==0){
+            return NULL;
+        }
+        stringstream s(data);
+        string str;
+        getline(s,str,',');
+        TreeNode *root=new TreeNode(stoi(str));
         queue<TreeNode*> q;
         q.push(root);
-        while (len) {
-            while(len--) {
-                // extracting the front of the queue
-                curr = q.front();
-                q.pop();
-                // adding left and right branches if present to both the tree and the queue
-                nextVal = readString(ser);
-                if (nextVal != INT_MIN) {
-                    curr->left = new TreeNode(nextVal);
-                    q.push(curr->left);
-                }
-                nextVal = readString(ser);
-                if (nextVal != INT_MIN) {
-                    curr->right = new TreeNode(nextVal);
-                    q.push(curr->right);
-                }
+        while(!q.empty()){
+            TreeNode* node=q.front();
+            q.pop();
+            getline(s,str,',');
+            if(str=="#"){
+                node->left=NULL;
             }
-            len = q.size();
+            else{
+                TreeNode *leftNode=new TreeNode(stoi(str));
+                node->left=leftNode;
+                q.push(leftNode);
+            }
+            getline(s,str,',');
+            if(str=="#"){
+                node->right=NULL;
+            }
+            else{
+                TreeNode *rightNode=new TreeNode(stoi(str));
+                node->right=rightNode;
+                q.push(rightNode);
+            }
         }
         return root;
     }
