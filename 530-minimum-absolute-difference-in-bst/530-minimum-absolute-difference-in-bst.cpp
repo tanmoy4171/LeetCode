@@ -11,19 +11,52 @@
  */
 class Solution {
 public:
-    int diff = INT_MAX;
-    TreeNode *prev = NULL;
-    void dfs(TreeNode *root) {
-        // moving to the left as much as we can
-        if (root->left) dfs(root->left);
-        // if we find at least a node before, we update diff
-        if (prev) diff = min(diff, abs(prev->val - root->val));
-        prev = root;
-        // moving to the right as much as we can
-        if (root->right) dfs(root->right);
+    TreeNode* inorder(TreeNode* root)
+    {
+        TreeNode* temp;
+        TreeNode* temp2=NULL;
+        TreeNode* start=NULL;
+        while(root)
+        {
+            
+            if(root->left)
+            {
+                temp=root->left;
+                while(temp->right)
+                {
+                    temp=temp->right;
+                }
+                temp->right=root;
+                temp=root->left;
+                root->left=NULL;
+                root=temp;
+                if(temp2)
+                {
+                    temp2->right=root;
+                }
+            }
+            else
+            {
+                if(start==NULL)
+                {
+                    start=root;
+                }
+                temp2=root;
+                root=root->right;
+            }
+        }
+        return start;
     }
-    int getMinimumDifference(TreeNode *root) {
-        dfs(root);
-        return diff;
+    int getMinimumDifference(TreeNode* root) {
+        TreeNode* start=inorder(root);
+        TreeNode* end=start->right;
+        int ans=INT_MAX;
+        while(end)
+        {
+            ans=min(ans,end->val-start->val);
+            start=start->right;
+            end=end->right;
+        }
+        return ans;    
     }
 };
