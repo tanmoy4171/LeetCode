@@ -11,21 +11,20 @@
  */
 class Solution {
 public:
-    int res = 0;
-    int path;
-    void dfs(TreeNode *root) {
-        // updating path
-        path ^= 1 << root->val;
-        // checking when in a leaf
-        if (!root->left && !root->right) res += !(path & (path - 1));
-        // exploring the branches
-        if (root->left) dfs(root->left);
-        if (root->right) dfs(root->right);
-        // backtracking
-        path ^= 1 << root->val;
+    int ans=0;    
+    void countPaths(TreeNode* root, int path){
+        path^=(1<<root->val);
+        if(!root->left && !root->right){
+            if((path & (path-1))==0) ans++;
+            return;
+        }
+        if(root->left) countPaths(root->left,path);
+        if(root->right) countPaths(root->right,path);
     }
-    int pseudoPalindromicPaths(TreeNode *root) {
-        dfs(root);
-        return res;
+    
+    int pseudoPalindromicPaths (TreeNode* root) {
+      if(!root) return 0;
+        countPaths(root,0);
+        return ans;
     }
 };
