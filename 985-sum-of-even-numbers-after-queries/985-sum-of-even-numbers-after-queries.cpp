@@ -1,37 +1,26 @@
 class Solution {
 public:
     vector<int> sumEvenAfterQueries(vector<int>& nums, vector<vector<int>>& queries) {
-
-        int sum = 0, N = queries.size();
-        for (int n : nums) {
-            if (n % 2 == 0) sum += n;
-        }
+        int size = queries.size();
+        int sum = 0;
+        vector<int> answer;
         
-        vector<int> ans(N, 0);
+        for(int num : nums)
+            if(num % 2 == 0)
+                sum += num;
         
-        // Four cases to handle.
-        for (int i = 0; i < N; i++) {
+        for(int i = 0; i < size; i++){
             int val = queries[i][0], index = queries[i][1];
-            int oldValue = nums[index];
+            int valToPush = sum;
+            if(nums[index] % 2 == 0)
+                valToPush -= nums[index];
             nums[index] += val;
-            
-            bool wasEven = (oldValue % 2) == 0;
-            bool nowEven = (nums[index] % 2 == 0);
-            
-            if (wasEven && nowEven) {
-                sum += val;
-                ans[i] = sum;
-            } else if (!wasEven && nowEven) {
-                sum += nums[index];
-                ans[i] = sum;
-            } else if (wasEven && !nowEven) {
-                sum -= oldValue;
-                ans[i] = sum;
-            } else {
-                ans[i] = sum;
-            }
+            if(nums[index] % 2 == 0)
+                valToPush += nums[index];
+            sum = valToPush;
+            answer.push_back(valToPush);
         }
         
-        return ans;
+        return answer;
     }
 };
