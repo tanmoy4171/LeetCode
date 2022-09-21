@@ -1,26 +1,49 @@
 class Solution {
 public:
     vector<int> sumEvenAfterQueries(vector<int>& nums, vector<vector<int>>& queries) {
-        int size = queries.size();
-        int sum = 0;
-        vector<int> answer;
         
-        for(int num : nums)
-            if(num % 2 == 0)
-                sum += num;
+		
+		// First Calculate Sum OF All Evene Values Only 
+        int evensum = 0;
+         vector<int> ans;
         
-        for(int i = 0; i < size; i++){
-            int val = queries[i][0], index = queries[i][1];
-            int valToPush = sum;
-            if(nums[index] % 2 == 0)
-                valToPush -= nums[index];
-            nums[index] += val;
-            if(nums[index] % 2 == 0)
-                valToPush += nums[index];
-            sum = valToPush;
-            answer.push_back(valToPush);
+        for(auto i : nums)
+        {     
+            if(i%2 == 0)
+                evensum  += i;
         }
         
-        return answer;
+        for(int i = 0 ; i<queries.size() ; i++)
+        {
+		   // Check Whether The Value of Given particular Nums at index from query is odd or even
+            if(nums[queries[i][1]] & 1)
+            {
+			 // if nums[index] is also odd and  value to be added is also odd than add the nums[index] and val in evensum
+               if(queries[i][0]&1)
+               {
+                  evensum += nums[queries[i][1]] + queries[i][0];
+               }
+            }
+            else
+            {
+			// If nums[idex] is even 
+			
+			// If value to be added is odd than substract the nums[index] because it will change to odd 
+                if(queries[i][0]&1)
+                   evensum -= nums[queries[i][1]];
+		   // If value to be added is even than add the val only in evensum
+                else
+                    evensum += queries[i][0];
+            }
+			// update The Nums[index]
+            nums[queries[i][1]] += queries[i][0];
+			
+			// Store Nums
+            ans.push_back(evensum);
+        }
+        
+        return ans;
+		
+		// Upvotes are highly Appreciated peeps !!
     }
 };
