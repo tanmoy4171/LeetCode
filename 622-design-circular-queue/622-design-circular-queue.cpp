@@ -1,27 +1,43 @@
 class MyCircularQueue {
-	// queue        - \U0001f937‍♂️
-	// frontIndex   - head/front of queue
-	// qSize        - current size of queue
-	// k            - max capacity of queue
-    vector<int> queue;
-    int frontIndex, qSize, k;
 public:
-    MyCircularQueue(int _k) : queue(vector<int>(_k)), frontIndex(0), qSize(0), k(_k)  {    }
-	
+    MyCircularQueue(int k){ arraysize=k; cq.resize(k); }
+    
     bool enQueue(int value) {
-        if(isFull()) return false;        
-        queue[(frontIndex + qSize) % k] = value;
-        qSize++;
+        if (isFull()) return false;
+        if(isEmpty()){ head=tail=0; cq[tail] = value;  size++; return true; }
+        tail++;
+         tail %= arraysize;
+        cq[tail] = value;
+       
+       
+        size++;
         return true;
     }
+    
     bool deQueue() {
-        if(isEmpty()) return false;  
-        frontIndex = (frontIndex + 1) % k;
-        qSize--;
+        if (isEmpty()) return false;
+        head = (head + 1) % arraysize;
+        size--;
         return true;
     }
-    int Front()    {   return isEmpty() ? -1 : queue[frontIndex]; }
-    int Rear()     {   return isEmpty() ? -1 : queue[(frontIndex + qSize - 1) % k];  }
-    bool isEmpty() {   return !qSize;      }
-    bool isFull()  {   return qSize == k;  }
+    
+    int Front() {
+        return isEmpty() ? -1 : cq[head];
+    }
+    
+    int Rear() {
+        return isEmpty() ? -1 : cq[tail];
+    }
+    
+    bool isEmpty() {
+        return size == 0;
+    }
+    
+    bool isFull() {
+        return size == arraysize;
+    }
+    
+private:
+    int head=0, tail=0, size=0, arraysize=0;
+    vector<int> cq;
 };
