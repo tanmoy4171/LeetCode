@@ -11,19 +11,32 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode *start=new ListNode(); 
-        start->next=head;
-        ListNode *slow=start,*fast=start;
-        for(int i=0;i<n;i++)
-            fast=fast->next; //traverse n nodes
+        ListNode* prev = head;
+        ListNode* curr = head->next;
+        int counter = 1;
         
-        while(fast->next!=nullptr){  //as i told fast will be at the last node
-            fast=fast->next;
-            slow=slow->next;
+        while(prev->next != nullptr)
+        {
+            prev = prev->next;
+            counter++;
         }
-        ListNode *del=slow->next; //step to finish matlab khatam krna hai node ko
-        slow->next=slow->next->next; //next pointer of the slow will point on just after the victim node
-        delete(del); //Khatam \U0001f47b
-        return start->next;
+        
+        prev = head;
+        
+       if(counter == 1 || counter == n)
+        {
+            prev = nullptr;
+            return curr; 
+        }
+		
+        for(int i = 0; i < counter - n - 1; i++)
+        {
+            prev = curr;
+            curr = curr->next;
+        }
+        
+        prev->next = curr->next;
+        
+        return head;
     }
 };
