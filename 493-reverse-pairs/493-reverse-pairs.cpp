@@ -4,7 +4,7 @@ private:
         int count = 0;
         int j = mid + 1;
         for(int i=low;i<mid+1;i++){
-            while(j<=high and nums[i]>2LL*nums[j]){
+            while(j<=high and nums[i]>(2LL*nums[j])){
                 j++;
             }
             count += j - (mid+1);
