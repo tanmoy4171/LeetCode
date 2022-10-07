@@ -1,21 +1,21 @@
 class MyCalendarThree {
+    private:
+    map<int, int>m1;
+    int ans;
 public:
-    map<int, int>mm;
     MyCalendarThree() {
         
     }
     
     int book(int start, int end) {
-        mm[start]++;
-        mm[end]--;
-        int ans = 0;
+        m1[start]++;
+        m1[end]--;
         int sum = 0;
-        for(auto &i : mm){
-            sum+=i.second;
-            ans = max(sum, ans);
+        for(auto [_,x]:m1){
+            sum+=x;
+            ans = max(ans, sum);
         }
         return ans;
-        
     }
 };
 
