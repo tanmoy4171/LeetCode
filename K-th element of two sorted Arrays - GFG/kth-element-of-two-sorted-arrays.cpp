@@ -8,7 +8,7 @@ class Solution{
     public:
     int kthElement(int nums1[], int nums2[], int n, int m, int k)
     {
-        if(m>n){
+        if(n>m){
             return kthElement(nums2, nums1,m,n,k);
         }
         int low=max(0,k-m);
