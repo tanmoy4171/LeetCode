@@ -12,19 +12,20 @@ class Solution
     
     int knapSack(int w, int weights[], int values[], int n) 
     { 
-        vector<vector<int>> dp(n, vector<int> (w + 1, 0));
-    	for(int i=weights[0];i<=w;i++)dp[0][i]=values[0];
+        vector<int> prev(w+1,0),curr(w+1,0);
+    	for(int i=weights[0];i<=w;i++)prev[i]=values[0];
     	for(int ind=1;ind<n;ind++){
     		for(int j=0;j<=w;j++){
-    			int nottake=dp[ind-1][j];
+    			int nottake=prev[j];
     			int take=-1e9;
     			if(weights[ind]<=j){
-    				take=values[ind]+dp[ind-1][j-weights[ind]];
+    				take=values[ind]+prev[j-weights[ind]];
     			}
-    			dp[ind][j]=max(take,nottake);
+    			curr[j]=max(take,nottake);
     		}
+    		prev=curr;
     	}
-    	return dp[n-1][w];
+    	return prev[w];
     }
 };
 
