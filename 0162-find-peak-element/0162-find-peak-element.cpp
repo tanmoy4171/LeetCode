@@ -5,6 +5,6 @@ public:
         while (l < r) 
             if (nums[l] < nums[r]) ++l;
             else --r;
-        return r;
+        return l;
     }
 };
