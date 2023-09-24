@@ -18,6 +18,6 @@ public:
              }
          }
          
-         return maxlen + 1;
+         return maxlen +1;
     }
 };
