@@ -9,13 +9,18 @@
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        if(headA==NULL || headB==NULL)return NULL;
-        ListNode* a=headA;
-        ListNode* b=headB;
-        while(a!=b){
-            a=a==NULL?headB:a->next;
-            b=b==NULL?headA:b->next;
+        // support variables
+        ListNode *originalHeadA = headA,  *originalHeadB = headB;
+        // turtle headA vs hare headB
+        while (headA || headB) {
+            // checking if a match is found
+            if (headA == headB) return headB;
+            // resetting or advancing A and B as needed
+            if (!headA) headA = originalHeadB;
+            else headA = headA->next;
+            if (!headB) headB = originalHeadA;
+            else headB = headB->next;
         }
-        return a;
+        return headB;
     }
 };
